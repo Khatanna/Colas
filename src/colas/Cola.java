@@ -2,65 +2,144 @@ package colas;
 
 public class Cola<T> {
 
-    public Nodo<T> cabeza, cola;
+    private final int limite = 100;
+    private int cabeza;
+    private int cola;
+    private T[] Cola;
 
     public Cola() {
-        this.cabeza = null;
-        this.cola = null;
+        this.cabeza = 0;
+        this.cola = 0;
+        this.Cola = (T[]) new Object[limite];
     }
 
-    public void push(T dato) {
-        Nodo<T> nuevo = new Nodo<>(dato);
-
-        if (cabeza == null) {
-            cabeza = nuevo;
-            cola = nuevo;
+    public void encolar(T dato) {
+        if (this.cabeza == this.limite) {
+            System.out.println("Cola llena");
         } else {
-            cola.setSiguiente(nuevo);
-            cola = nuevo;
+            this.Cola[this.cola] = dato;
+            this.cola++;
         }
     }
 
-    public T pop() {
-        if (cabeza == null && cola == null) {
+    public T desencolar() {
+        if (this.cabeza == this.cola) {
             return null;
-        } else {
-            T dato = cabeza.getDato();
-            cabeza = cabeza.getSiguiente();
-            return dato;
         }
+        T dato = this.Cola[this.cabeza];
+        this.cabeza++;
+
+        return dato;
+    }
+
+    public boolean estaVacia() {
+        return this.cabeza == -1 && this.cola == -1 || this.cabeza - 1 == this.cola;
     }
 
     @Override
     public String toString() {
-        String mostrar = "";
+        String datos = "";
 
-        if (cabeza == null && cola == null) {
-            return "La cola está vacía";
+        if (this.estaVacia()) {
+            return "Cola vacia!";
         } else {
-            Nodo<T> aux = cabeza;
-            while (aux != null) {
-                mostrar += aux + "";
-                aux = aux.getSiguiente();
+            int aux = this.cabeza;
+            while (aux != this.cola) {
+                datos += "[" + this.Cola[aux] + "]👉";
+                aux++;
             }
-            mostrar += "null";
+            datos += "null";
+            return datos;
+        }
+    }
+    
+    public void eliminarPrimos(){
+        int auxFinal = this.cola;
+        while(this.cabeza != auxFinal){
+            T elemento = this.desencolar();
+            if(!esPrimo((int) elemento)){
+                this.encolar(elemento);
+            }
+        }
+    }
+    
+    public boolean esPrimo(int n){
+        int cont = 0;
+        for (int i = 1; i <= n; i++) {
+            if(n % i == 0){
+                cont++;
+            }
+        }
+        return cont == 2; 
+    }
+    
+    public void invertir(){
+        Pila<T> pila = new Pila<>();
+        while(this.cabeza != this.cola){
+            T elemento = this.desencolar();
+            pila.push(elemento);
+        }
+        
+        while(!pila.isEmpty()){
+            this.encolar(pila.pop());
+        }
+    }
+
+    public void invertir(int k, int m) {
+        int auxFinal = this.cola;
+        Pila pila = new Pila();
+        int index = this.cabeza;
+
+        while (index != auxFinal) {
+            T elemento = this.desencolar();
+            if (index >= k && index <= m) {
+                pila.push(elemento);
+            } else {
+                this.encolar(elemento);
+            }
+            index++;
+        }
+        int iterator = 0;
+        while (iterator < index) {
+            if (iterator >= k && iterator <= m) {
+                T dato = (T) pila.pop();
+                this.encolar(dato);
+            } else {
+                T elemento = this.desencolar();
+                this.encolar(elemento);
+            }
+            iterator++;
+        }
+    }
+
+    public Cola interseccion(Cola<T> B) {
+        Cola<T> union = new Cola<>();
+
+        while (this.cabeza != this.cola) {
+            union.encolar(this.desencolar());
         }
 
-        return mostrar;
+        while(B.cabeza != B.cola){
+            union.encolar(B.desencolar());
+        }
+        
+        return union;
+    }
+
+    public void forEach(T[] array) {
+        for (int i = 0; i < array.length; i++) {
+            this.encolar(array[i]);
+        }
     }
 
     public static void main(String[] args) {
-        Cola<Integer> cola = new Cola<>();
+        Cola<Integer> queueOne = new Cola<>();
+        Cola<Integer> queueTwo = new Cola<>();
+        Integer[] foreachOne = {1,2,3,4,5,6,7,8,9};
+        Integer[] foreachTwo = {20, 40, 60, 80};
 
-        cola.push(1);
-        cola.push(2);
-        cola.push(3);
-        cola.push(4);
-        cola.push(5);
-        cola.pop();
-        cola.pop();
-
-        System.out.println(cola);
+        queueOne.forEach(foreachOne);
+        queueTwo.forEach(foreachTwo);
+        System.out.println(queueOne);
     }
-
 }
