@@ -287,10 +287,11 @@ public class Formulario extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        Cola<Integer> interseccion = null;
         if (!colaNumerosA.estaVacia()) {
-            //colaNumeros.invetirConRango(k, m);
+            interseccion = colaNumerosA.interseccion(colaNumerosB);;
         }
-        jTextArea1.setText(colaNumerosA.toString());
+        jTextArea3.setText(interseccion.toString());
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
@@ -298,14 +299,17 @@ public class Formulario extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        int dimension = Integer.parseInt(jTextField2.getText());
+        int dimension = Integer.parseInt(jTextField3.getText());
 
         colaNumerosB.generar(dimension);
-        jTextArea2.setText(colaNumerosB.toString());
+        jTextArea3.setText(colaNumerosB.toString());
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
+        if(!colaNumerosA.estaVacia() && !colaNumerosB.estaVacia()){
+            colaNumerosA.union(colaNumerosB);
+        }
+        jTextArea3.setText(colaNumerosA.toString());
     }//GEN-LAST:event_jButton7ActionPerformed
 
     /**
